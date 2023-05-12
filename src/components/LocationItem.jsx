@@ -16,38 +16,6 @@ export default function LocationItem({ location }) {
   const dislikeCount = useSelector((state) => state.disLikeCounter.value);
 
   return (
-    // <div className='card flex justify-center items-center'>
-    //   <div className='card-header flex justify-center items-center mt-5 mb-5'>
-    //     <p>
-    //       {location.country} / {location.county}
-    //     </p>
-    //   </div>
-    //   <div className='card-body flex flex-col justify-center '>
-    //     <div>
-    //       <Link href={`/location/${location.brandName}`}>
-    //         <div className='image-container rounded shadow-sm aspect-w-1 aspect-h-1'>
-    //           <img
-    //             src={location.image}
-    //             alt={location.brandName}
-    //             className='object-cover object-center w-full h-full'
-    //           />
-    //         </div>
-    //       </Link>
-    //     </div>
-
-    //     <div className=' ml-3'>
-    //       <p>like</p>
-    //     </div>
-    //   </div>
-    //   <div className='card-footer flex flex-col items-center justify-center p-5 pb-2'>
-    // <div className=' text-lg text-gray-700 font-mono'>
-    //   {location.brandName}
-    // </div>
-    // <div className=' font-sans'>
-    //   <p>{location.description}</p>
-    // </div>
-    //   </div>
-    // </div>
     <div className='card'>
       <div className='card-header'>
         <p>
@@ -55,7 +23,6 @@ export default function LocationItem({ location }) {
         </p>
       </div>
       <div className='card-body'>
-        <Link href={`/Location/${location.slug}`}>İncele</Link>
         <img
           src={location.image}
           alt={location.brandName}
@@ -68,7 +35,7 @@ export default function LocationItem({ location }) {
             {/* <button
               className='likeButton'
               aria-label='Increment value'
-              // onClick={() => dispatchLike(incrementLike())}
+               onClick={() => dispatchLike(incrementLike())}
             > */}
             <div className='like cursor-pointer '>
               <img src='/images/heart.svg' className='' />
@@ -89,7 +56,10 @@ export default function LocationItem({ location }) {
 
           <div className=' text-gray-700 font-mono'>{location.brandName}</div>
         </div>
-        <div className='mt-5 font-sans'>
+        <div className=' flex  flex-col mt-5 font-sans'>
+          <div className='border-[1px] rounded-full border-blue-600'>
+            <Link href={`/Location/${location.slug}`}>İncele</Link>
+          </div>
           <span>{location.description}</span>
         </div>
       </div>
