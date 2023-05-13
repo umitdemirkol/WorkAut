@@ -15,6 +15,7 @@ import {
   decrementDisLike,
   incrementDisLike,
 } from '@/stores/disLikeCounterSlice';
+import { Table } from '@nextui-org/react';
 
 export default function Location() {
   const { query } = useRouter();
@@ -61,16 +62,20 @@ export default function Location() {
             <div className='text-sm'>{item?.likes}</div>
           </div>
         </div>
-        <div className=' flex  flex-col ml-10 mt-10 mb-10 md:col-span-3 md:w-full justify-center item-center m-auto'>
+        <div className=' flex  flex-col ml-10 mt-10 mb-10 md:col-span-3 md:w-full justify-between item-center m-auto'>
           <div className=' mb-10 '>
             <ul className=' gap-2'>
               <li className=' border-b-2 justify-center items-center flex'>
-                {' '}
                 {item?.brandName}
               </li>
               <li className=''>
-                Konum: {item?.country} / {item?.county}{' '}
+                Konum: {item?.country} / {item?.county}
               </li>
+              <li>Açıklama: {item?.description}</li>
+              <li>Açıklama: {item?.description}</li>
+              <li>Açıklama: {item?.description}</li>
+              <li>Açıklama: {item?.description}</li>
+              <li>Açıklama: {item?.description}</li>
               <li>Açıklama: {item?.description}</li>
             </ul>
           </div>
@@ -81,23 +86,39 @@ export default function Location() {
               loading='lazy'
             />
           </div>
-          <div className=' w-full rounded-md border-2 mt-10'>
-            <table className=' w-full justify-center items-center  '>
-              <thead className=' bg-black text-white rounded-md border-2 '>
-                <tr>
-                  <th>Kişi</th>
-                  <th>orum</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>sa</td>
-                  <td>sa</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
+      </div>
+      <div className=' w-full rounded-md  mt-10'>
+        <Table
+          aria-label='Example table with static content'
+          css={{
+            height: 'auto',
+            minWidth: '100%',
+          }}
+        >
+          <Table.Header>
+            <Table.Column></Table.Column>
+            <Table.Column></Table.Column>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row key='1'>
+              <Table.Cell>Tony Reichert</Table.Cell>
+              <Table.Cell>Çok iyi kafe aq</Table.Cell>
+            </Table.Row>
+            <Table.Row key='2'>
+              <Table.Cell>Zoey Lang</Table.Cell>
+              <Table.Cell>İnanılmaz çalıştım burada harikaydı</Table.Cell>
+            </Table.Row>
+            <Table.Row key='3'>
+              <Table.Cell>Jane Fisher</Table.Cell>
+              <Table.Cell>Çok sakin </Table.Cell>
+            </Table.Row>
+            <Table.Row key='4'>
+              <Table.Cell>William Howard</Table.Cell>
+              <Table.Cell>tatlıları mükemmel</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </div>
     </>
   );
