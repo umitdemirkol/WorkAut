@@ -24,7 +24,7 @@ export default function LocationItem({ location }) {
       </div>
       <div className='card-body'>
         <img
-          src={location.image}
+          src={location.poster}
           alt={location.brandName}
           className='card-image'
         />
@@ -41,7 +41,7 @@ export default function LocationItem({ location }) {
               <img src='/images/heart.svg' className='' />
             </div>
 
-            <div className='text-sm'>{likeCount}</div>
+            <div className='text-sm'>{location.likes}</div>
             {/* </button> */}
 
             {/* <button
@@ -56,10 +56,10 @@ export default function LocationItem({ location }) {
 
           <div className=' text-gray-700 font-mono'>{location.brandName}</div>
         </div>
+        <div className='border-[1px] mx-auto w-8 rounded-full border-blue-600'>
+          <Link href={`/Location/${location.slug}`}>Go</Link>
+        </div>
         <div className=' flex  flex-col mt-5 font-sans'>
-          <div className='border-[1px] rounded-full border-blue-600'>
-            <Link href={`/Location/${location.slug}`}>İncele</Link>
-          </div>
           <span>{location.description}</span>
         </div>
       </div>

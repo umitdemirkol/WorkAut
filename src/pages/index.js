@@ -2,15 +2,17 @@
 import LocationItem from '@/components/LocationItem';
 import data from '../../data/data';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 export default function Home() {
   const [search, setSearch] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 12;
+  const [isSearching, setIsSearching] = useState(false);
 
   const filteredLocations = data.locations.filter((location) => {
-    if (!search) {
-      return true; // Tüm verileri göster
+    if (!isSearching) {
+      return true;
     } else {
       const lowerSearch = search.toLowerCase();
       return (
@@ -38,8 +40,12 @@ export default function Home() {
       </div>
       <div className='flex mt-10 justify-center items-center gap-1'>
         <input
-          placeholder='Search'
-          onChange={(e) => setSearch(e.target.value)}
+          placeholder='istanbul , kadıköy , izmir ..'
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setIsSearching(true);
+            setCurrentPage(1);
+          }}
           className='w-full pl-10 h-14 tablet:text-xs tablet:px-2 tablet:w-full py-1 px-3
            focus:dark:placeholder-white/50 font-normal text-md bg-zinc-100 dark:bg-zinc-800 outline-0
             focus:dark:bg-zinc-700 border-2 border-zinc-100 dark:!border-zinc-800 transition ease-in-out duration-300
@@ -49,7 +55,6 @@ export default function Home() {
         />
       </div>
       <div className='flex flex-col gap-2 font-serif mt-20'>
-        {/* ... */}
         <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 justify-items-center md:text-center lg:grid-cols-4'>
           {paginatedLocations.map((location) => (
             <LocationItem location={location} key={location.slug} />
@@ -95,3 +100,7 @@ export default function Home() {
     </div>
   );
 }
+
+const DynamicHeader = dynamic(() => import('../../data/data'), {
+  ssr: false,
+});
