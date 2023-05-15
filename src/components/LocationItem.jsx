@@ -1,20 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { incrementLike } from '@/stores/likeCounterSlice';
-import {
-  decrementDisLike,
-  incrementDisLike,
-} from '@/stores/disLikeCounterSlice';
 
 export default function LocationItem({ location }) {
-  const likeCount = useSelector((state) => state.likeCounter.value);
-  const dispatchLike = useDispatch();
-  const dispatchDisLike = useDispatch();
-  const dislikeCount = useSelector((state) => state.disLikeCounter.value);
-
   return (
     <div className='card'>
       <div className='card-header'>
@@ -32,31 +22,14 @@ export default function LocationItem({ location }) {
       <div className='card-footer flex flex-col justify-between text-center'>
         <div className='flex flex-row justify-between'>
           <div className='flex flex-row gap-1 items-center justify-center'>
-            {/* <button
-              className='likeButton'
-              aria-label='Increment value'
-               onClick={() => dispatchLike(incrementLike())}
-            > */}
             <div className='like cursor-pointer '>
               <img src='/images/heart.svg' className='' />
             </div>
-
             <div className='text-sm'>{location.likes}</div>
-            {/* </button> */}
-
-            {/* <button
-              className='dislike'
-              aria-label='Decrement value'
-              // onClick={() => dispatchDisLike(incrementDisLike())}
-            >
-              <img src='/images/dislike.png' className='w-4 mt-[0.25px]'></img>
-              <div className='text-sm'>{dislikeCount}</div>
-            </button> */}
           </div>
-
           <div className=' text-gray-700 font-mono'>{location.brandName}</div>
         </div>
-        <div className='border-[1px] mx-auto w-8 rounded-full border-blue-600'>
+        <div className='border-[1px] mx-auto w-auto p-1 h-[30px] rounded-full border-blue-600'>
           <Link href={`/Location/${location.slug}`}>Go</Link>
         </div>
         <div className=' flex  flex-col mt-5 font-sans'>

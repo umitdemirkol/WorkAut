@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+// eslint-disable-next-line react-hooks/rules-of-hooks
+
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Router, useRouter } from 'next/router';
 import data from '../../../data/data';
@@ -10,24 +13,33 @@ import { Paper, Button } from '@mui/material';
 import Meta from '@/components/Meta';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { incrementLike } from '@/stores/likeCounterSlice';
-import {
-  decrementDisLike,
-  incrementDisLike,
-} from '@/stores/disLikeCounterSlice';
+import { incrementLike, decrementLike } from '@/stores/likeCounterSlice';
 import { Table } from '@nextui-org/react';
+import { useSession } from 'next-auth/react';
 
 export default function Location() {
   const { query } = useRouter();
   const { slug } = query;
   const item = data.locations.find((item) => item.slug == slug);
-
-  console.log(item);
-
+  // const [likes, setLikes] = useState();
+  const { data: session } = useSession();
+  const disable = !session;
   const likeCount = useSelector((state) => state.likeCounter.value);
   const dispatchLike = useDispatch();
-  const dispatchDisLike = useDispatch();
-  const dislikeCount = useSelector((state) => state.disLikeCounter.value);
+
+  const likeClick = (e) => {
+    console.log(e.target.checked);
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      // Update +1 likes mongo
+      dispatchLike(incrementLike());
+      console.log(likeCount);
+    } else {
+      // Update -1 likes mongo
+      dispatchLike(decrementLike());
+      console.log(likeCount);
+    }
+  };
 
   return (
     <>
@@ -55,22 +67,26 @@ export default function Location() {
               );
             })}
           </Carousel>
-          <div className='mt-3 flex flex-row'>
-            <div className='like cursor-pointer '>
-              <img src='/images/heart.svg' />
+          <div className='mt-3 flex flex-row justify-start gap-2  items-center'>
+            <div className=''>
+              <input
+                id='heart'
+                type='checkbox'
+                onClick={(e) => likeClick(e)}
+                disabled={disable}
+              />
+              <label for='heart'>❤</label>
             </div>
-            <div className='text-sm'>{item?.likes}</div>
+            <div className='text-2xl'>{item?.likes}</div>
           </div>
         </div>
         <div className=' flex  flex-col ml-10 mt-10 mb-10 md:col-span-3 md:w-full justify-between item-center m-auto'>
           <div className=' mb-10 '>
             <ul className=' gap-2'>
               <li className=' border-b-2 justify-center items-center flex'>
-                {item?.brandName}
+                {item?.country} / {item?.county}
               </li>
-              <li className=''>
-                Konum: {item?.country} / {item?.county}
-              </li>
+              <li className=''>İsim: {item?.brandName}</li>
               <li>Açıklama: {item?.description}</li>
               <li>Açıklama: {item?.description}</li>
               <li>Açıklama: {item?.description}</li>
@@ -120,6 +136,46 @@ export default function Location() {
           </Table.Body>
         </Table>
       </div>
+      <style jsx>{`
+        [id='heart'] {
+          position: absolute;
+          left: -500vw;
+        }
+
+        [for='heart'] {
+          color: #aab8c2;
+          cursor: pointer;
+          font-size: 3em;
+          align-self: center;
+          transition: color 0.2s ease-in-out;
+        }
+
+        [for='heart']:hover {
+          color: grey;
+        }
+
+        [for='heart']::selection {
+          color: none;
+          background: transparent;
+        }
+
+        [for='heart']::moz-selection {
+          color: none;
+          background: transparent;
+        }
+
+        [id='heart']:checked + label {
+          color: #e2264d;
+          will-change: font-size;
+        }
+
+        @keyframes heart {
+          0%,
+          17.5% {
+            font-size: 0;
+          }
+        }
+      `}</style>
     </>
   );
 }
