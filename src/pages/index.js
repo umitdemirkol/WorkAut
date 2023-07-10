@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 export default function Home() {
   const [search, setSearch] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 8;
   const [isSearching, setIsSearching] = useState(false);
 
   const filteredLocations = data.locations.filter((location) => {
@@ -47,10 +47,10 @@ export default function Home() {
             setCurrentPage(1);
           }}
           className='w-full pl-10 h-14 tablet:text-xs tablet:px-2 tablet:w-full py-1 px-3
-           focus:dark:placeholder-white/50 font-normal text-md bg-zinc-100 dark:bg-zinc-800 outline-0
-            focus:dark:bg-zinc-700 border-2 border-zinc-100 dark:!border-zinc-800 transition ease-in-out duration-300
-             placeholder-zinc-400 dark:placeholder-zinc-600 text-black dark:text-white rounded-full focus:border-none
-              focus:bg-zinc-100 focus:dark:shadow-black/20 focus:ring-0  flex justify-center text-center text-2xl placeholder:text-2xl'
+           font-normal text-md bg-zinc-100 
+             border-2 border-zinc-100  transition ease-in-out duration-300
+             placeholder-zinc-400  text-black  rounded-full focus:border-none
+                focus:ring-0  flex justify-center text-center text-2xl placeholder:text-2xl'
           type='input'
         />
       </div>

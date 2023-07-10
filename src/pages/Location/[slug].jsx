@@ -14,18 +14,42 @@ import Meta from '@/components/Meta';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementLike, decrementLike } from '@/stores/likeCounterSlice';
-import { Table } from '@nextui-org/react';
+import { Table, Avatar } from '@nextui-org/react';
 import { useSession } from 'next-auth/react';
 
 export default function Location() {
   const { query } = useRouter();
   const { slug } = query;
   const item = data.locations.find((item) => item.slug == slug);
+  const comments = item?.numRevies;
+
   // const [likes, setLikes] = useState();
   const { data: session } = useSession();
   const disable = !session;
   const likeCount = useSelector((state) => state.likeCounter.value);
   const dispatchLike = useDispatch();
+
+  const [comment, setComment] = useState('');
+
+  const handleCommentChange = (e) => {
+    console.log(e);
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    // commenti db ye kaydetmek gerek objectıd userıd ve comment olarak
+    e.preventDefault();
+    console.log(e);
+    const uniqComment = {
+      userId: session.user?.name,
+      comment: comment,
+      timeSpan: new Date().toLocaleString(),
+    };
+
+    comments.push(uniqComment);
+    console.log(comments);
+    setComment('');
+  };
 
   const likeClick = (e) => {
     console.log(e.target.checked);
@@ -75,7 +99,7 @@ export default function Location() {
                 onClick={(e) => likeClick(e)}
                 disabled={disable}
               />
-              <label for='heart'>❤</label>
+              <label htmlFor='heart'>❤</label>
             </div>
             <div className='text-2xl'>{item?.likes}</div>
           </div>
@@ -105,6 +129,21 @@ export default function Location() {
         </div>
       </div>
       <div className=' w-full rounded-md  mt-10'>
+        <form className=' ' onSubmit={handleSubmit}>
+          <textarea
+            rows='4'
+            cols='50'
+            className='w-[250px] border-2 rounded-full'
+            value={comment}
+            onChange={handleCommentChange}
+          />
+          <button
+            className=' border-2 p-4 border-s-orange-50 rounded-full'
+            type='submit'
+          >
+            Gönder
+          </button>
+        </form>
         <Table
           aria-label='Example table with static content'
           css={{
@@ -113,26 +152,35 @@ export default function Location() {
           }}
         >
           <Table.Header>
-            <Table.Column></Table.Column>
-            <Table.Column></Table.Column>
+            <Table.Column>Kişi</Table.Column>
+            <Table.Column>Yorum</Table.Column>
+            <Table.Column>image</Table.Column>
+            <Table.Column>tarih</Table.Column>
           </Table.Header>
           <Table.Body>
-            <Table.Row key='1'>
+            {item?.numRevies.map((item, index) => (
+              <Table.Row key={index}>
+                <Table.Cell>
+                  <Avatar
+                    src='https://i.pravatar.cc/150?u=a042581f4e29026024d'
+                    size='sm'
+                  />
+                </Table.Cell>
+                <Table.Cell>{item?.userId}</Table.Cell>
+                <Table.Cell>{item?.comment}</Table.Cell>
+                <Table.Cell>{item?.timeSpan}</Table.Cell>
+              </Table.Row>
+            ))}
+            {/* <Table.Row key='1'>
+              <Table.Cell>
+                <Avatar
+                  src='https://i.pravatar.cc/150?u=a042581f4e29026024d'
+                  size='sm'
+                />
+              </Table.Cell>
               <Table.Cell>Tony Reichert</Table.Cell>
               <Table.Cell>Çok iyi kafe aq</Table.Cell>
-            </Table.Row>
-            <Table.Row key='2'>
-              <Table.Cell>Zoey Lang</Table.Cell>
-              <Table.Cell>İnanılmaz çalıştım burada harikaydı</Table.Cell>
-            </Table.Row>
-            <Table.Row key='3'>
-              <Table.Cell>Jane Fisher</Table.Cell>
-              <Table.Cell>Çok sakin </Table.Cell>
-            </Table.Row>
-            <Table.Row key='4'>
-              <Table.Cell>William Howard</Table.Cell>
-              <Table.Cell>tatlıları mükemmel</Table.Cell>
-            </Table.Row>
+            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
