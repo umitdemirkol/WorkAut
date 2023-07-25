@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
+import { Router, useRouter } from 'next/router';
 
 export default function LocationItem({ location }) {
+  const router = useRouter();
   return (
     <div className='card'>
       <div className='card-header'>
@@ -12,11 +14,14 @@ export default function LocationItem({ location }) {
           {location.country} / {location.county}
         </p>
       </div>
-      <div className='card-body'>
+      <div
+        className='card-body cursor-pointer'
+        onClick={() => router.push(`/Location/${location.slug}`)}
+      >
         <img
           src={location.poster}
           alt={location.brandName}
-          className='card-image'
+          className='card-image cursor-pointer'
         />
       </div>
       <div className='card-footer flex flex-col justify-between text-center'>
@@ -29,8 +34,11 @@ export default function LocationItem({ location }) {
           </div>
           <div className=' text-gray-700 font-mono'>{location.brandName}</div>
         </div>
-        <div className='border-[1px] mx-auto w-auto p-1 h-[30px] rounded-full border-blue-600'>
-          <Link href={`/Location/${location.slug}`}>Go</Link>
+        <div
+          className='border-[1px] mx-auto w-auto p-1 h-[30px] rounded-full border-blue-600 cursor-pointer'
+          onClick={() => router.push(`/Location/${location.slug}`)}
+        >
+          Yes
         </div>
         <div className=' flex  flex-col mt-5 font-sans'>
           <span>{location.description}</span>

@@ -36,7 +36,7 @@ const Header = () => {
     );
   }
   return (
-    <nav className='flex h-12 items-center px-4 justify-between shadow-md font-mono rounded-full m-6 '>
+    <nav className='flex h-fit items-center pl-5 justify-between shadow-md font-mono rounded-full m-6 '>
       <div className='flex justify-between'>
         <div>
           <p className=' text-xl'>
@@ -63,36 +63,32 @@ const Header = () => {
                 <Text b color='inherit' css={{ d: 'flex' }}>
                   Hesap
                 </Text>
-                <Text b color='inherit' css={{ d: 'flex' }}>
-                  {session?.user?.email}
-                </Text>
               </Dropdown.Item>
+
               <Dropdown.Item key='settings' withDivider>
                 Ayarlar
               </Dropdown.Item>
+
               <Dropdown.Item key='configurations'>
-                {/* Burada configurations dropdown'a tıklandığında, "isLocationsOpen" state'ini true olarak ayarlayarak Location componentini açıyoruz */}
-                <button className='flex w-full' onClick={() => openLocations()}>
+                <button
+                  className='flex w-full h-full'
+                  onClick={() => openLocations()}
+                >
                   Yer
                 </button>
               </Dropdown.Item>
+
               <Dropdown.Item key='help_and_feedback' withDivider>
                 Help & Feedback
               </Dropdown.Item>
+
               <Dropdown.Item key='logout' color='error' withDivider>
-                {/* <div className='border-[1px] cursor-pointer rounded-full bg-black text-white p-2 font-serif'> */}
                 <button className=' flex w-full' onClick={() => signOut()}>
-                  Çıkış
+                  Log Out
                 </button>
-                {/* </div> */}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          {/* <User
-            src={session?.user?.image}
-            name={session?.user?.name}
-            bordered
-          /> */}
         </div>
       </div>
       {isLocationsOpen && <Location visible={true} onClose={closeLocations} />}
