@@ -7,8 +7,15 @@ import Location from './newLocation';
 
 const Header = () => {
   const { data: session } = useSession();
-  const [visible, setVisible] = React.useState(false);
-  const handler = () => setVisible(true);
+  const [isLocationsOpen, setIsLocationsOpen] = useState(false);
+
+  const openLocations = () => {
+    setIsLocationsOpen(true);
+  };
+
+  const closeLocations = () => {
+    setIsLocationsOpen(false);
+  };
 
   if (!session) {
     return (
@@ -64,15 +71,19 @@ const Header = () => {
                 Ayarlar
               </Dropdown.Item>
               <Dropdown.Item key='configurations'>
-                <Location visible={visible} />
-                <button onClick={() => handler()}>Yer</button>
+                {/* Burada configurations dropdown'a tıklandığında, "isLocationsOpen" state'ini true olarak ayarlayarak Location componentini açıyoruz */}
+                <button className='flex w-full' onClick={() => openLocations()}>
+                  Yer
+                </button>
               </Dropdown.Item>
               <Dropdown.Item key='help_and_feedback' withDivider>
                 Help & Feedback
               </Dropdown.Item>
               <Dropdown.Item key='logout' color='error' withDivider>
                 {/* <div className='border-[1px] cursor-pointer rounded-full bg-black text-white p-2 font-serif'> */}
-                <button onClick={() => signOut()}> Çıkış</button>
+                <button className=' flex w-full' onClick={() => signOut()}>
+                  Çıkış
+                </button>
                 {/* </div> */}
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -84,6 +95,7 @@ const Header = () => {
           /> */}
         </div>
       </div>
+      {isLocationsOpen && <Location visible={true} onClose={closeLocations} />}
     </nav>
   );
 };

@@ -15,9 +15,11 @@ export default function Home() {
       return true;
     } else {
       const lowerSearch = search.toLowerCase();
+      const lowerCountry = location.country.toLowerCase();
+      const lowerCounty = location.county.toLowerCase();
+      console.log(lowerSearch, lowerCountry, lowerCounty);
       return (
-        location.country.toLocaleLowerCase().includes(lowerSearch) ||
-        location.county.toLocaleLowerCase().includes(lowerSearch)
+        lowerCountry.includes(lowerSearch) || lowerCounty.includes(lowerSearch)
       );
     }
   });
