@@ -17,9 +17,48 @@ const Header = () => {
     setIsLocationsOpen(false);
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  const mobileUser = (
+    <User
+      bordered
+      size='lg'
+      as='button'
+      color='primary'
+      src={session?.user?.image}
+    />
+  );
+
+  // Normal ekranlar için User bileşeni
+  const normalUser = (
+    <User
+      bordered
+      as='button'
+      size='md'
+      color='primary'
+      src={session?.user?.image}
+      name={session?.user?.name}
+      description={session?.user?.email}
+    />
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Örnek bir ekran genişliği, istediğiniz değeri kullanabilirsiniz
+    };
+
+    handleResize(); // Sayfa yüklendiğinde ve boyut değişikliklerinde çalışması için başlangıçta çağırıyoruz.
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   if (!session) {
     return (
-      <nav className='flex h-12 items-center px-4 justify-between shadow-md font-mono rounded-full m-6'>
+      <nav className='flex h-12 items-center px-4 justify-between shadow-md font-mono rounded-full m-20'>
         <div className='flex justify-between'>
           <div>
             <p className=' text-xl'>
@@ -36,7 +75,7 @@ const Header = () => {
     );
   }
   return (
-    <nav className='flex h-fit items-center pl-5 justify-between shadow-md font-mono rounded-full m-6 '>
+    <nav className='flex h-fit items-center pl-5 justify-between shadow-md font-mono rounded-full m-16 '>
       <div className='flex justify-between'>
         <div>
           <p className=' text-xl'>
@@ -45,18 +84,10 @@ const Header = () => {
         </div>
       </div>
       <div className='flex flex-row justify-center items-center gap-3'>
-        <div className='  bg-gray-200 rounded-full w-56'>
+        <div className='  bg-gray-200 rounded-full md:w-56'>
           <Dropdown placement='bottom-left' className=' border-2 bg-black'>
             <Dropdown.Trigger>
-              <User
-                bordered
-                as='button'
-                size='md'
-                color='primary'
-                src={session?.user?.image}
-                name={session?.user?.name}
-                description={session?.user?.email}
-              />
+              {isMobile ? mobileUser : normalUser}
             </Dropdown.Trigger>
             <Dropdown.Menu color='primary' aria-label='User Actions'>
               <Dropdown.Item key='profile' css={{ height: '$18' }}>
