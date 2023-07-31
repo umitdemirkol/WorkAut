@@ -13,6 +13,7 @@ import { Password } from '../../models/Password';
 import { useSession } from 'next-auth/react';
 import { Dropdown, User } from '@nextui-org/react';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function Location({ visible, onClose }) {
   const [cafe, setCafe] = useState('');
@@ -43,6 +44,7 @@ export default function Location({ visible, onClose }) {
 
     const formData = new FormData();
     formData.append('file', selectedFile);
+    console.log(formData);
 
     try {
       const response = await fetch('/api/uploadImage', {
@@ -56,16 +58,34 @@ export default function Location({ visible, onClose }) {
         // Burada sunucudan dönen resim yolunu kullanabilirsiniz (data.imageUrl).
         // İstediğiniz şekilde işleyebilir veya görsel olarak gösterebilirsiniz.
       } else {
-        alert('Resim yüklenirken bir hata oluştu!');
+        alert('Resim amk bir hata oluştu!');
       }
     } catch (error) {
       console.error('Bir hata oluştu:', error);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('Name:', cafe, images, country, county, iframe);
-    console.log('file:', selectedFile, selectedImage);
+
+    let location = {
+      brandName: cafe.toString(),
+      category: 'cafe',
+      country: country.toString(),
+      slug: cafe.slice(0, 2).toString(),
+      county: county.toString(),
+      mapLoc: iframe.toString(),
+      poster: 'asda',
+      images: [],
+      likes: 12,
+      numReviews: 123,
+      description: 'deeneme',
+      isVisible: 1,
+    };
+    axios
+      .post('/api/set_location', { location: location })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     closeHandler();
   };
@@ -145,7 +165,7 @@ export default function Location({ visible, onClose }) {
         <Button auto flat color='error' onPress={closeHandler}>
           Close
         </Button>
-        <Button auto onPress={handleUpload}>
+        <Button auto onPress={handleSubmit}>
           Create Request
         </Button>
       </Modal.Footer>

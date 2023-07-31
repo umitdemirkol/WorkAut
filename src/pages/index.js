@@ -1,34 +1,38 @@
 /* eslint-disable @next/next/no-img-element */
 import LocationItem from '@/components/LocationItem';
-import data from '../../data/data';
-import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import axios from 'axios';
 
-export default function Home() {
-  const [search, setSearch] = useState();
+const itemsPerPage = 8;
+
+export default function Home({ locations }) {
+  const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
   const [isSearching, setIsSearching] = useState(false);
 
-  const filteredLocations = data.locations.filter((location) => {
-    if (!isSearching) {
-      return true;
-    } else {
-      const lowerSearch = search.toLowerCase();
-      const lowerCountry = location.country.toLowerCase();
-      const lowerCounty = location.county.toLowerCase();
-      console.log(lowerSearch, lowerCountry, lowerCounty);
-      return (
-        lowerCountry.includes(lowerSearch) || lowerCounty.includes(lowerSearch)
-      );
-    }
-  });
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearch(searchValue);
+    setIsSearching(true);
+    setCurrentPage(1);
+  };
+
+  const filteredLocations = isSearching
+    ? locations?.filter(
+        (location) =>
+          location.country.toLowerCase().includes(search) ||
+          location.county.toLowerCase().includes(search)
+      )
+    : locations;
 
   const pageCount = Math.ceil(filteredLocations.length / itemsPerPage);
   const paginatedLocations = filteredLocations.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handlePreviousPage = () => setCurrentPage(currentPage - 1);
+  const handleNextPage = () => setCurrentPage(currentPage + 1);
 
   return (
     <div className='flex flex-col gap-2 font-serif mt-20'>
@@ -43,11 +47,7 @@ export default function Home() {
       <div className='flex mt-10 justify-center items-center gap-1'>
         <input
           placeholder='istanbul , kadıköy , izmir ..'
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setIsSearching(true);
-            setCurrentPage(1);
-          }}
+          onChange={(e) => handleSearchChange()}
           className='w-full pl-10 h-14 tablet:text-xs tablet:px-2 tablet:w-full py-1 px-3
            font-normal text-md bg-zinc-100 
              border-2 border-zinc-100  transition ease-in-out duration-300
@@ -67,7 +67,7 @@ export default function Home() {
             {currentPage > 1 && (
               <button
                 className='pagination-button hover:text-blue-700 mr-2'
-                onClick={() => setCurrentPage(currentPage - 1)}
+                onClick={() => handlePreviousPage()}
               >
                 Önceki
               </button>
@@ -75,7 +75,7 @@ export default function Home() {
             {currentPage < pageCount && (
               <button
                 className='pagination-button hover:text-blue-700'
-                onClick={() => setCurrentPage(currentPage + 1)}
+                onClick={() => handleNextPage()}
               >
                 Sonraki
               </button>
@@ -103,6 +103,25 @@ export default function Home() {
   );
 }
 
-const DynamicHeader = dynamic(() => import('../../data/data'), {
-  ssr: false,
-});
+export async function getServerSideProps() {
+  try {
+    const response = await axios.get('http://localhost:3000/api/get_location');
+    const locations = response.data;
+    return {
+      props: {
+        locations,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    return {
+      props: {
+        locations: [],
+      },
+    };
+  }
+}
+
+// const DynamicHeader = dynamic(() => import('../../data/data'), {
+//   ssr: false,
+// });

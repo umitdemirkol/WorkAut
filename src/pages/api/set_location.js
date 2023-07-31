@@ -1,3 +1,4 @@
+import { mongooseConnect } from '../../../lib/mongoose';
 import Location from '../../../models/Location';
 
 export default async function handler(req, res) {
@@ -6,10 +7,11 @@ export default async function handler(req, res) {
     return;
   }
   const { location } = req.body;
+  console.log(location);
 
   try {
-    await connecMongoDB();
-    Location.create({ location }).then((data) => {
+    await mongooseConnect();
+    Location.create(location).then((data) => {
       console.log(data);
       res.status(201).send(data);
     });

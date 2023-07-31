@@ -1,19 +1,19 @@
-import mongoose from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
-const locationSchema = new mongoose.Schema({
-  brandName: { type: String, required: true },
-  category: { type: String, required: true },
-  country: { type: String, required: true },
-  slug: { type: String, required: true, unique: true },
-  county: { type: String, required: true },
-  mapLoc: { type: String, required: true },
-  poster: { type: String, required: true },
+const locationSchema = new Schema({
+  brandName: { type: String },
+  category: { type: String },
+  country: { type: String },
+  slug: { type: String, unique: true },
+  county: { type: String },
+  mapLoc: { type: String },
+  poster: { type: String },
   images: [{ type: String }],
   likes: { type: Number, default: 0 },
   numReviews: { type: Number, default: 0 },
-  description: { type: String, required: true },
-  isVisible: { type: Boolean, required: true },
+  description: { type: String },
+  isVisible: { type: Boolean },
 });
 
-const Location = mongoose.model('Location', locationSchema);
+const Location = models.Location || model('Location', locationSchema);
 export default Location;
