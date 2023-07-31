@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 // eslint-disable-next-line react-hooks/rules-of-hooks
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Image from 'next/image';
 import { Router, useRouter } from 'next/router';
 import data from '../../../data/data';
@@ -16,14 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incrementLike, decrementLike } from '@/stores/likeCounterSlice';
 import { Table, Avatar } from '@nextui-org/react';
 import { useSession } from 'next-auth/react';
+import axios from 'axios';
 
-export default function Location() {
-  const { query } = useRouter();
-  const { slug } = query;
-  const item = data.locations.find((item) => item.slug == slug);
-  const comments = item?.numRevies;
+export default function Location({ location }) {
+  const locationData = location;
 
-  // const [likes, setLikes] = useState();
+  const [likes, setLikes] = useState();
   const { data: session } = useSession();
   const disable = !session;
   const likeCount = useSelector((state) => state.likeCounter.value);
@@ -32,14 +30,13 @@ export default function Location() {
   const [comment, setComment] = useState('');
 
   const handleCommentChange = (e) => {
-    console.log(e);
     setComment(e.target.value);
   };
 
   const handleSubmit = (e) => {
     // commenti db ye kaydetmek gerek objectıd userıd ve comment olarak
     e.preventDefault();
-    console.log(e);
+
     const uniqComment = {
       userId: session.user?.name,
       comment: comment,
@@ -47,28 +44,25 @@ export default function Location() {
     };
 
     comments.push(uniqComment);
-    console.log(comments);
+
     setComment('');
   };
 
   const likeClick = (e) => {
-    console.log(e.target.checked);
     const isChecked = e.target.checked;
     if (isChecked) {
       // Update +1 likes mongo
       dispatchLike(incrementLike());
-      console.log(likeCount);
     } else {
       // Update -1 likes mongo
       dispatchLike(decrementLike());
-      console.log(likeCount);
     }
   };
 
   return (
     <>
       <Meta
-        title={`${item?.brandName} / ${item?.county}`}
+        title={`${locationData?.brandName} / ${locationData?.county}`}
         keyword='work at out , dışarıda çalışma , nerede çalışırım ? '
       />
       <div className=' cursor-pointer w-10 h-6 rounded-md hover:bg-gray-400 text-white bg-black flex justify-center'>
@@ -77,7 +71,7 @@ export default function Location() {
       <div className='grid md:grid-cols-6 md:gap-3 mt-10'>
         <div className='md:col-span-3 mt-3 p-5 justify-center items-center rounded-lg'>
           <Carousel className=' bg-gray-200 rounded-lg flex justify-center items-center flex-col'>
-            {item?.images?.map((movie, i) => {
+            {locationData?.images?.map((movie, i) => {
               return (
                 <Paper
                   className='flex justify-center items-center w-full h-[400px]'
@@ -101,28 +95,28 @@ export default function Location() {
               />
               <label htmlFor='heart'>❤</label>
             </div>
-            <div className='text-2xl'>{item?.likes}</div>
+            <div className='text-2xl'>{locationData?.likes}</div>
           </div>
         </div>
         <div className=' flex  flex-col ml-10 mt-10 mb-10 md:col-span-3 md:w-full justify-between item-center m-auto'>
           <div className=' mb-10 '>
             <ul className=' gap-2'>
               <li className=' border-b-2 justify-center items-center flex'>
-                {item?.country} / {item?.county}
+                {locationData?.country} / {locationData?.county}
               </li>
-              <li className=''>İsim: {item?.brandName}</li>
-              <li>Açıklama: {item?.description}</li>
-              <li>Açıklama: {item?.description}</li>
-              <li>Açıklama: {item?.description}</li>
-              <li>Açıklama: {item?.description}</li>
-              <li>Açıklama: {item?.description}</li>
-              <li>Açıklama: {item?.description}</li>
+              <li className=''>İsim: {locationData?.brandName}</li>
+              <li>Açıklama: {locationData?.description}</li>
+              <li>Açıklama: {locationData?.description}</li>
+              <li>Açıklama: {locationData?.description}</li>
+              <li>Açıklama: {locationData?.description}</li>
+              <li>Açıklama: {locationData?.description}</li>
+              <li>Açıklama: {locationData?.description}</li>
             </ul>
           </div>
           <div className=' flex justify-center items-center rounded-md border-2'>
             <iframe
               className='relative w-full h-full'
-              src={item?.mapLoc}
+              src={locationData?.mapLoc}
               loading='lazy'
             />
           </div>
@@ -158,7 +152,7 @@ export default function Location() {
             <Table.Column>tarih</Table.Column>
           </Table.Header>
           <Table.Body>
-            {item?.numRevies.map((item, index) => (
+            {locationData?.numRevies.map((item, index) => (
               <Table.Row key={index}>
                 <Table.Cell>
                   <Avatar
@@ -171,16 +165,6 @@ export default function Location() {
                 <Table.Cell>{item?.timeSpan}</Table.Cell>
               </Table.Row>
             ))}
-            {/* <Table.Row key='1'>
-              <Table.Cell>
-                <Avatar
-                  src='https://i.pravatar.cc/150?u=a042581f4e29026024d'
-                  size='sm'
-                />
-              </Table.Cell>
-              <Table.Cell>Tony Reichert</Table.Cell>
-              <Table.Cell>Çok iyi kafe aq</Table.Cell>
-            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
@@ -226,4 +210,29 @@ export default function Location() {
       `}</style>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  try {
+    const { query } = context;
+    const { objectId } = query;
+
+    const response = await axios.get(`http://localhost:3000/api/get_location`, {
+      params: { objectId },
+    });
+    const location = response.data;
+
+    return {
+      props: {
+        location,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    return {
+      props: {
+        locations: {},
+      },
+    };
+  }
 }

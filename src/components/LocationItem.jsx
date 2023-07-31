@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Router, useRouter } from 'next/router';
 
 export default function LocationItem({ location }) {
+  console.log(location);
   const router = useRouter();
   return (
     <div className='card'>
@@ -16,7 +17,7 @@ export default function LocationItem({ location }) {
       </div>
       <div
         className='card-body cursor-pointer'
-        onClick={() => router.push(`/Location/${location.slug}`)}
+        onClick={() => router.push(`/Location/${location._id}`)}
       >
         <img
           src={location.poster}
@@ -36,12 +37,12 @@ export default function LocationItem({ location }) {
         </div>
         <div
           className='border-[1px] mx-auto w-auto p-1 h-[30px] rounded-full border-blue-600 cursor-pointer'
-          onClick={() => router.push(`/Location/${location.slug}`)}
+          onClick={() => router.push(`/Location/${location._id}`)}
         >
           Yes
         </div>
-        <div className=' flex  flex-col mt-5 font-sans'>
-          <span>{location.description}</span>
+        <div className=' flex flex-row mt-5 font-sans text-sm justify-end'>
+          <span>{location.numRevies.length} Comments</span>
         </div>
       </div>
       <style jsx>{`

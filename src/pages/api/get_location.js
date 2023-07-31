@@ -9,11 +9,25 @@ export default async function handler(req, res) {
 
   try {
     await mongooseConnect();
-    const allLocations = await Location.find({});
-    console.log('sea', allLocations);
-    res.status(201).send(allLocations);
+
+    const { objectId } = req.query;
+
+    if (objectId) {
+      // If objectId is provided, fetch only the specific location
+      const location = await Location.findById(objectId);
+
+      if (!location) {
+        res.status(404).send({ msg: 'Location not found' });
+        return;
+      }
+
+      res.status(200).send(location);
+    } else {
+      // If no objectId is provided, fetch all locations
+      const allLocations = await Location.find({});
+      res.status(200).send(allLocations);
+    }
   } catch (err) {
-    console.log(err);
-    res.status(201).send({ err, msg: 'bişeyler yanlış beybisu' });
+    res.status(500).send({ err, msg: 'Something went wrong' });
   }
 }

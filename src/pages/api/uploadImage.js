@@ -10,8 +10,6 @@ export const config = {
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    console.log(req, res);
-
     const form = new formidable.IncomingForm();
     form.uploadDir = './public/uploads'; // Yüklenen resimlerin kaydedileceği klasör
     form.keepExtensions = true;

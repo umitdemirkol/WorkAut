@@ -11,6 +11,7 @@ export default function Home({ locations }) {
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearchChange = (e) => {
+    console.log(e);
     const searchValue = e.target.value.toLowerCase();
     setSearch(searchValue);
     setIsSearching(true);
@@ -47,7 +48,7 @@ export default function Home({ locations }) {
       <div className='flex mt-10 justify-center items-center gap-1'>
         <input
           placeholder='istanbul , kadıköy , izmir ..'
-          onChange={(e) => handleSearchChange()}
+          onChange={(e) => handleSearchChange(e)}
           className='w-full pl-10 h-14 tablet:text-xs tablet:px-2 tablet:w-full py-1 px-3
            font-normal text-md bg-zinc-100 
              border-2 border-zinc-100  transition ease-in-out duration-300

@@ -7,16 +7,13 @@ export default async function handler(req, res) {
     return;
   }
   const { location } = req.body;
-  console.log(location);
 
   try {
     await mongooseConnect();
     Location.create(location).then((data) => {
-      console.log(data);
       res.status(201).send(data);
     });
   } catch (err) {
-    console.log(err);
     res.status(201).send({ err, msg: 'bişeyler yanlış beybisu' });
   }
 }
