@@ -62,15 +62,18 @@ export default function Location({ location }) {
   return (
     <>
       <Meta
-        title={`${locationData?.brandName} / ${locationData?.county}`}
-        keyword='work at out , dışarıda çalışma , nerede çalışırım ? '
+        title={`WorkAut`}
+        keyword={`$${locationData?.brandName} ,${locationData?.county},${locationData?.description},${locationData?.country}`}
       />
       <div className=' cursor-pointer w-10 h-6 rounded-md hover:bg-gray-400 text-white bg-black flex justify-center'>
         <Link href={`/`}>Geri</Link>
       </div>
+      <li className=' border-b-2 justify-center items-center flex text-xl'>
+        {locationData?.country} / {locationData?.county}
+      </li>
       <div className='grid md:grid-cols-6 md:gap-3 mt-10'>
         <div className='md:col-span-3 mt-3 p-5 justify-center items-center rounded-lg'>
-          <Carousel className=' bg-gray-200 rounded-lg flex justify-center items-center flex-col'>
+          <Carousel className=' bg-gray-200 rounded-lg flex justify-center items-center flex-col shadow-lg'>
             {locationData?.images?.map((movie, i) => {
               return (
                 <Paper
@@ -98,24 +101,22 @@ export default function Location({ location }) {
             <div className='text-2xl'>{locationData?.likes}</div>
           </div>
         </div>
-        <div className=' flex  flex-col ml-10 mt-10 mb-10 md:col-span-3 md:w-full justify-between item-center m-auto'>
+        <div className=' flex  flex-col ml-10 mt-10 gap-14 md:col-span-3 md:w-full justify-between item-center m-auto'>
           <div className=' mb-10 '>
-            <ul className=' gap-2'>
-              <li className=' border-b-2 justify-center items-center flex'>
-                {locationData?.country} / {locationData?.county}
+            <ul className=' gap-4'>
+              {/* <li className=' border-b-2 justify-center items-center flex'>
+                {locationData.brandName}
+              </li> */}
+              <li className=' justify-center text-xl items-center flex'>
+                {locationData?.brandName}
               </li>
-              <li className=''>İsim: {locationData?.brandName}</li>
-              <li>Açıklama: {locationData?.description}</li>
-              <li>Açıklama: {locationData?.description}</li>
-              <li>Açıklama: {locationData?.description}</li>
-              <li>Açıklama: {locationData?.description}</li>
               <li>Açıklama: {locationData?.description}</li>
               <li>Açıklama: {locationData?.description}</li>
             </ul>
           </div>
           <div className=' flex justify-center items-center rounded-md border-2'>
             <iframe
-              className='relative w-full h-full'
+              className='relative w-full h-[250px]'
               src={locationData?.mapLoc}
               loading='lazy'
             />

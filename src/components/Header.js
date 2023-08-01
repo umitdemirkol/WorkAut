@@ -63,6 +63,7 @@ const Header = () => {
           <div>
             <p className=' text-xl'>
               <Link href={`/`}>WorkAut</Link>
+              <image width='30px' src='/images/W.gif' alt='' />
             </p>
           </div>
         </div>
@@ -80,6 +81,7 @@ const Header = () => {
         <div>
           <p className=' text-xl'>
             <Link href={`/`}>WorkAut</Link>
+            {/* <img width='30px' height='20px' src='/images/WorkAut.gif' alt='' /> */}
           </p>
         </div>
       </div>
@@ -96,16 +98,16 @@ const Header = () => {
                 </Text>
               </Dropdown.Item>
 
-              <Dropdown.Item key='settings' withDivider>
+              {/* <Dropdown.Item key='settings' withDivider>
                 Ayarlar
-              </Dropdown.Item>
+              </Dropdown.Item> */}
 
               <Dropdown.Item key='configurations'>
                 <button
                   className='flex w-full h-full'
                   onClick={() => openLocations()}
                 >
-                  Yer
+                  Lokasyon Ekle
                 </button>
               </Dropdown.Item>
 

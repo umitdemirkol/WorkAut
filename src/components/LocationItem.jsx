@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { Router, useRouter } from 'next/router';
 
 export default function LocationItem({ location }) {
-  console.log(location);
   const router = useRouter();
   return (
     <div className='card'>
@@ -42,7 +40,7 @@ export default function LocationItem({ location }) {
           Yes
         </div>
         <div className=' flex flex-row mt-5 font-sans text-sm justify-end'>
-          <span>{location.numRevies.length} Comments</span>
+          <span>{location?.numRevies?.length} Comments</span>
         </div>
       </div>
       <style jsx>{`

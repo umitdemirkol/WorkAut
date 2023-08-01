@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import LocationItem from '@/components/LocationItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const itemsPerPage = 8;
 
 export default function Home({ locations }) {
+  const visibleLocations = locations?.filter((item) => item.isVisible == 1);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
@@ -19,12 +20,12 @@ export default function Home({ locations }) {
   };
 
   const filteredLocations = isSearching
-    ? locations?.filter(
+    ? visibleLocations?.filter(
         (location) =>
           location.country.toLowerCase().includes(search) ||
           location.county.toLowerCase().includes(search)
       )
-    : locations;
+    : visibleLocations;
 
   const pageCount = Math.ceil(filteredLocations.length / itemsPerPage);
   const paginatedLocations = filteredLocations.slice(
@@ -122,7 +123,3 @@ export async function getServerSideProps() {
     };
   }
 }
-
-// const DynamicHeader = dynamic(() => import('../../data/data'), {
-//   ssr: false,
-// });

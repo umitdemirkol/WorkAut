@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import { Dropdown, User } from '@nextui-org/react';
 import { useState } from 'react';
 import axios from 'axios';
+import { Zoom, toast } from 'react-toastify';
 
 export default function Location({ visible, onClose }) {
   const [cafe, setCafe] = useState('');
@@ -75,7 +76,7 @@ export default function Location({ visible, onClose }) {
       slug: cafe.slice(0, 2).toString(),
       county: county.toString(),
       mapLoc: iframe.toString(),
-      poster: 'asda',
+      poster: '',
       images: [],
       likes: 12,
       numReviews: 123,
@@ -84,8 +85,35 @@ export default function Location({ visible, onClose }) {
     };
     axios
       .post('/api/set_location', { location: location })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast('🦄 Oluşturma Başarılı :)', {
+          type: 'success',
+          position: 'bottom-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          transition: Zoom,
+          progress: undefined,
+          theme: 'light',
+        });
+      })
+      .catch((err) => {
+        toast('🦄 Lokasyon Oluşturulamadı!', {
+          type: 'warning',
+          position: 'bottom-right',
+          autoClose: 5000,
+          transition: Zoom,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: 'light',
+        });
+        console.log(err);
+      });
 
     closeHandler();
   };
